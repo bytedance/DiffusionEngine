@@ -1,4 +1,21 @@
--r requirements/build.txt
--r requirements/optional.txt
--r requirements/runtime.txt
--r requirements/tests.txt
+accelerate
+diffusers
+transformers
+cloudpickle
+hydra-core
+omegaconf==2.1.0
+pybind11
+flake8==3.8.1 
+isort==4.3.21
+black==22.3.0
+autoflake
+timm
+pytest
+scipy==1.7.3
+psutil
+opencv-python
+wandb
+submitit
+einops
+gradio==3.41.2
+httpx==0.23.3

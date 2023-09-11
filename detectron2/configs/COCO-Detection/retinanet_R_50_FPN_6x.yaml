@@ -1,0 +1,17 @@
+_BASE_: "../Base-RetinaNet.yaml"
+MODEL:
+  WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  RESNETS:
+    DEPTH: 50
+DATASETS:
+  TRAIN: ("coco_2017_train",)
+  TEST: ("coco_2017_val",)
+SOLVER:
+  IMS_PER_BATCH: 32
+  BASE_LR: 0.02
+  STEPS: (210000, 250000)
+  MAX_ITER: 270000
+  CHECKPOINT_PERIOD: 10000
+TEST:
+  EVAL_PERIOD: 10000
+OUTPUT_DIR: 'outputs/RetinaNet-6x'

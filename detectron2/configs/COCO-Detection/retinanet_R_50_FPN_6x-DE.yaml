@@ -1,0 +1,4 @@
+_BASE_: "./retinanet_R_50_FPN_6x.yaml"
+DATASETS:
+  TRAIN: ("coco_2017_train", "coco-de")
+OUTPUT_DIR: 'outputs/RetinaNet-6x-DE'

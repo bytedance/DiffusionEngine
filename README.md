@@ -1,23 +1,27 @@
 # DiffusionEngine
+[[Project Page](https://mettyz.github.io/DiffusionEngine/)]
 <p align="center">
-<img src=misc/samples/head.png />
+<img src=misc/samples/head.jpg />
 </p>
 
 ## Environment
-Follow [this](https://github.com/CompVis/latent-diffusion/#requirements) to create and activate the `ldm` environment.
-Then
 ```shell
-bash init_diffeng.sh
+conda create -n DE python=3.10
+conda activate DE
+
+pip install torch torchvision
+python -m pip install -e detectron2
+pip install -e .
 ```
 
 ## Datasets
-Datasets should be placed in `./data`
+DE datasets are assumed to be placed in `./engine_output/`
 We provide [COCO-DE](), [VOC-DE]() 
 
 ## Pretrained Models
-Download the checkpoints and placed in `pretrained_models/`
-- [sd-v2-512-base-ema.ckpt](https://huggingface.co/stabilityai/stable-diffusion-2-base/tree/main/512-base-ema.ckpt)
-- [diffeng-dino-ldm.pth]()
+Download the checkpoints and placed in `./pt_models/`
+- [stable-diffusion-2-base](https://huggingface.co/stabilityai/stable-diffusion-2-base)
+- [diffeng_model_best](dino_sd2-0_5scale_bsz64_90k_model_best.pth)
 
 ## Try DiffusionEngine with Gradio App
 ```shell
@@ -26,5 +30,27 @@ python diffusionEngine_gradio.py
 
 ## Train your own DiffusionEngine
 ```shell
-python tools/dist_train.py configs/dino/dino_4scale_ldm_8x2_12e_coco.py 8 --work-dir path_to_save_model_and_log
+python projects/diffusionengine/train_net.py \
+    --config-file projects/diffusionengine/configs/dino-ldm/dino_sd2_512_5scale_90k.py \
+    --num-gpus ${GPUS_PER_NODE} --machine-rank ${RANK} --num-machines ${NNODES} \
+    --dist-url=tcp://${MASTER_ADDR}:${MASTER_PORT}
 ```
+
+## Dataset Scaling-up with DiffusionEngine
+```shell
+python projects/diffusionengine/train_net.py \
+    --config-file projects/diffusionengine/configs/dino-ldm/dino_sd2_512_5scale_90k.py \
+    --num-gpus ${GPUS_PER_NODE} --machine-rank ${RANK} --num-machines ${NNODES} \
+    --dist-url=tcp://${MASTER_ADDR}:${MASTER_PORT} \
+    -de \
+    train.init_checkpoint=pt_models/dino_sd2-0_5scale_bsz64_90k_model_best.pth \
+    train.engine_output_dir=${OUTPUT_DIR} \
+    train.seed=${SEED}
+```
+
+## Dataset PostProcess & Regsiter
+Add the engine output dataset dir in `./detectron2/detectron2/data/datasets/register_coco_de.py`.
+
+## License
+
+This project is released under the [Apache 2.0 license](LICENSE).

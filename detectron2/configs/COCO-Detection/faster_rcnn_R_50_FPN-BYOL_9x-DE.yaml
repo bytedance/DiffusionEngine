@@ -1,0 +1,4 @@
+_BASE_: "./faster_rcnn_R_50_FPN-BYOL_9x.yaml"
+DATASETS:
+  TRAIN: ("coco_2017_train", "coco-de")
+OUTPUT_DIR: 'outputs/FRCNN-R50-FPN-BYOL-SyncBN-9x-DE'

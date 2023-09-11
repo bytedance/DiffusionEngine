@@ -1,0 +1,25 @@
+_BASE_: "../Base-RCNN-FPN.yaml"
+MODEL:
+  WEIGHTS: "pt_models/byol_backbone.pkl"
+  MASK_ON: False
+  BACKBONE:
+    FREEZE_AT: 0
+  RESNETS:
+    DEPTH: 50
+    NORM: "SyncBN"
+  FPN:
+    NORM: "SyncBN"
+DATASETS:
+  TRAIN: ("coco_2017_train",)
+  TEST: ("coco_2017_val",)
+SOLVER:
+  IMS_PER_BATCH: 48
+  BASE_LR: 0.04
+  STEPS: (210000, 250000)
+  MAX_ITER: 270000
+  CHECKPOINT_PERIOD: 10000
+TEST:
+  EVAL_PERIOD: 10000
+  PRECISE_BN:
+    ENABLED: True
+OUTPUT_DIR: 'outputs/FRCNN-R50-FPN-BYOL-SyncBN-9x'
